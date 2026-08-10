@@ -95,27 +95,19 @@ export function RescheduleForm({
     minimumDate.setHours(minimumDate.getHours() + 2);
 
     if (selectedDate.getTime() < minimumDate.getTime()) {
-      setError(
-        "Please choose a time at least 2 hours from now.",
-      );
+      setError("Please choose a time at least 2 hours from now.");
       return;
     }
 
-    const timeZone =
-      Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     // datetime-local contains no timezone information.
     // The selected value represents the parent's local time,
     // so we explicitly interpret it in the browser timezone
     // before converting it to UTC for the backend/function.
-    const newSlotUtc = fromZonedTime(
-      newSlot,
-      timeZone,
-    ).toISOString();
+    const newSlotUtc = fromZonedTime(newSlot, timeZone).toISOString();
 
-    const existingSlotUtc = new Date(
-      session.datetime,
-    ).toISOString();
+    const existingSlotUtc = new Date(session.datetime).toISOString();
 
     try {
       setLoading(true);
@@ -127,10 +119,7 @@ export function RescheduleForm({
       });
 
       if (!response.success) {
-        setError(
-          response.error ??
-            "Unable to submit the reschedule request.",
-        );
+        setError(response.error ?? "Unable to submit the reschedule request.");
         return;
       }
 
@@ -138,9 +127,7 @@ export function RescheduleForm({
       setNewSlot("");
       setReason("");
     } catch {
-      setError(
-        "Something went wrong while submitting the request.",
-      );
+      setError("Something went wrong while submitting the request.");
     } finally {
       setLoading(false);
     }
@@ -168,44 +155,36 @@ export function RescheduleForm({
           <DialogTitle>Request Reschedule</DialogTitle>
 
           <DialogDescription>
-            Choose a new time for your {session.subject} session
-            with {session.teacherName}.
+            Choose a new time for your {session.subject} session with{" "}
+            {session.teacherName}.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 py-4">
           <div className="space-y-2">
-            <Label htmlFor="new-slot">
-              New date and time
-            </Label>
+            <Label htmlFor="new-slot">New date and time</Label>
 
             <Input
               id="new-slot"
               type="datetime-local"
               value={newSlot}
               min={minimumSlot}
-              onChange={(event) =>
-                setNewSlot(event.target.value)
-              }
+              onChange={(event) => setNewSlot(event.target.value)}
               disabled={loading || success}
             />
 
             <p className="text-xs text-muted-foreground">
-              Times are shown in your local timezone. New slots
-              must be at least 2 hours from now.
+              Times are shown in your local timezone. New slots must be at least
+              2 hours from now.
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="reason">
-              Reason for rescheduling
-            </Label>
+            <Label htmlFor="reason">Reason for rescheduling</Label>
 
             <Select
               value={reason}
-              onValueChange={(value) =>
-                setReason(value as RescheduleReason)
-              }
+              onValueChange={(value) => setReason(value as RescheduleReason)}
               disabled={loading || success}
             >
               <SelectTrigger id="reason">
@@ -236,7 +215,14 @@ export function RescheduleForm({
               role="status"
               className="rounded-md border border-green-500/30 bg-green-500/10 p-3 text-sm text-green-700"
             >
-              Reschedule request submitted successfully.
+              <p className="font-medium">
+                Reschedule request submitted successfully.
+              </p>
+
+              <p className="mt-1 text-green-700/80">
+                The requested time has been accepted by the mock reschedule
+                service.
+              </p>
             </div>
           )}
         </div>

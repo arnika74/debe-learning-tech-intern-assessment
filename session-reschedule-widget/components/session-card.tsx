@@ -34,7 +34,7 @@ export function SessionCard({
   }, [session.datetime]);
 
   return (
-    <Card className="flex h-full flex-col">
+    <Card className="flex h-full flex-col transition-shadow hover:shadow-md">
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
           <div>
