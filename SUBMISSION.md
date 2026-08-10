@@ -13,7 +13,9 @@ https://github.com/arnika74/
 ## 2. Repository 1 — Energy Research App
 **Repository:**
 https://github.com/arnika74/Energy-Research-App
+
 **Project Type:** Team Project
+
 **My Role:** Development and Deployment
 
 ### Q. What problem does the project solve?
@@ -42,7 +44,9 @@ Because the research process is asynchronous and involves multiple processing st
 ## 3. Repository 2 — Zerodha Clone
 **Repository:**
 https://github.com/arnika74/Zerodha-Clone
+
 **Project Type:** Individual Project
+
 **My Role:** Sole Developer
 
 ### Q. What problem does the project solve?
@@ -191,18 +195,24 @@ To reflect this real-world constraint, I implemented a two-hour lead-time policy
 The form disables times that fall within two hours of the current time.
 
 For example, if the current time is:
+
 6:00 PM
+
 then:
+
 6:30 PM   ❌ Disabled
 7:00 PM   ❌ Disabled
 7:59 PM   ❌ Disabled
 8:00 PM   ✅ Available
+
 This rule is also checked during submission rather than relying only on the UI.
 This prevents a user from bypassing the restriction simply by sending an invalid request directly to the function.
 
 ### Local Time and UTC Handling
 Timezone handling is important because a parent and tutoring system may operate in different timezones.
+
 The parent should see and select the session time in their local timezone, because this is the most natural way for them to interact with the scheduling form.
+
 However, the application should not store timezone-dependent local values as the source of truth.
 
 Therefore, my implementation follows this flow:
@@ -242,15 +252,19 @@ This helps ensure that the data sent from the UI matches the structure expected 
 The reschedule request is asynchronous, so the UI includes appropriate states.
 
 **Loading State**
+
 While the request is being processed:
-The submit action is disabled.
-A loading state is displayed.
-The user cannot accidentally submit the same request multiple times.
+
+- The submit action is disabled.
+- A loading state is displayed.
+- The user cannot accidentally submit the same request multiple times.
 
 **Error State**
+
 If validation fails or the request returns an error, the error is shown in the UI rather than allowing an unhandled promise rejection.
 
 **Success State**
+
 After a successful request, the parent receives a clear confirmation that the reschedule request was submitted successfully.
 
 ### Technical Implementation
