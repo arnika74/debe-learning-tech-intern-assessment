@@ -134,8 +134,6 @@ A useful rescheduling flow should allow the parent to:
 
 To simulate this workflow, I built a self-contained **Session Reschedule Widget** using Next.js, React, and TypeScript.
 
----
-
 ## How My Solution Solves the Problem
 
 The widget displays the student's next three upcoming tutoring sessions using mocked data.
@@ -162,7 +160,7 @@ The request is then sent to a locally mocked `requestReschedule` function. The f
 
 ### Overall Flow
 
-```text
+~~~text
 Parent views upcoming sessions
             │
             ▼
@@ -194,58 +192,67 @@ Parent views upcoming sessions
             │
             ▼
     Result shown to parent
-Why the Validation Is Important
+~~~
+
+## Why the Validation Is Important
 
 The rescheduling feature should not accept every date and time entered by the parent.
 
-The mock requestReschedule function validates that:
+The mock `requestReschedule` function validates that:
 
-The new slot is valid.
-The new slot is not in the past.
-The new slot is different from the existing session time.
+1. The new slot is valid.
+2. The new slot is not in the past.
+3. The new slot is different from the existing session time.
 
 It returns the following typed response:
 
+~~~typescript
 {
   success: boolean;
   error?: string;
 }
+~~~
 
 This keeps the frontend/function communication predictable and prevents invalid requests from being accepted.
 
-Two-Hour Lead-Time Policy
+## Two-Hour Lead-Time Policy
 
 A tutoring session should not normally be rescheduled immediately before it starts because the teacher and tutoring system need reasonable notice.
 
-To reflect this real-world constraint, I implemented a two-hour lead-time policy.
+To reflect this real-world constraint, I implemented a **two-hour lead-time policy**.
 
 The form disables times that fall within two hours of the current time.
 
 For example, if the current time is:
 
+~~~text
 6:00 PM
+~~~
 
 then:
 
+~~~text
 6:30 PM   ❌ Disabled
 7:00 PM   ❌ Disabled
 7:59 PM   ❌ Disabled
 8:00 PM   ✅ Available
+~~~
 
 This rule is also checked during submission rather than relying only on the UI.
 
 This prevents a user from bypassing the restriction simply by sending an invalid request directly to the function.
 
-Local Time and UTC Handling
+## Local Time and UTC Handling
 
 Timezone handling is important because a parent and tutoring system may operate in different timezones.
 
-The parent should see and select the session time in their local timezone, because this is the most natural way for them to interact with the scheduling form.
+The parent should see and select the session time in their **local timezone**, because this is the most natural way for them to interact with the scheduling form.
 
 However, the application should not store timezone-dependent local values as the source of truth.
 
 Therefore, my implementation follows this flow:
 
+~~~text
 Parent selects local date/time
             │
             ▼
@@ -261,14 +268,15 @@ using that timezone
             ▼
     UTC value sent to the
     requestReschedule function
+~~~
 
 The value is therefore stored/requested in UTC while the parent continues to interact with the application using their local time.
 
-This distinction is especially important because the HTML datetime-local input does not include timezone information by itself.
+This distinction is especially important because the HTML `datetime-local` input does not include timezone information by itself.
 
 The timezone conversion is explicitly handled in the code rather than assuming that the selected value is already UTC.
 
-Type Safety
+## Type Safety
 
 The implementation uses TypeScript throughout the feature.
 
@@ -276,52 +284,57 @@ The session, reschedule request, reason, and response structures are represented
 
 The relevant type structure is:
 
+~~~text
 types/
 ├── session.ts
 └── reschedule.ts
+~~~
 
 The frontend and the mocked Cloud Function use the same reschedule types.
 
-No any type is used.
+No `any` type is used.
 
 This helps ensure that the data sent from the UI matches the structure expected by the function.
 
-Loading and Error Handling
+## Loading and Error Handling
 
 The reschedule request is asynchronous, so the UI includes appropriate loading, error, and success states.
 
-Loading State
+### Loading State
 
 While the request is being processed:
 
-The submit button is disabled.
-A loading state is displayed.
-The user cannot accidentally submit the same request multiple times.
-Error State
+- The submit button is disabled.
+- A loading state is displayed.
+- The user cannot accidentally submit the same request multiple times.
+
+### Error State
 
 If validation fails or the request returns an error, the error is displayed in the UI.
 
 The asynchronous request is handled so that there are no unhandled promise rejections.
 
-Success State
+### Success State
 
 After a successful request, the parent receives a clear confirmation that the reschedule request was submitted successfully.
 
-Technical Implementation
+## Technical Implementation
 
 The feature was built using:
 
-Next.js App Router
-React
-TypeScript
-Tailwind CSS
-shadcn/ui
-date-fns
-date-fns-tz
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- date-fns
+- date-fns-tz
 
 The Firebase Cloud Function was mocked locally because the assessment allows the function to be stubbed locally and does not require a deployed Firebase project.
 
-Project Structure
+## Project Structure
+
+~~~text
 session-reschedule-widget/
 │
 ├── app/
@@ -343,12 +356,15 @@ session-reschedule-widget/
 │   └── reschedule.ts
 │
 └── README.md
-Incremental Development
+~~~
+
+## Incremental Development
 
 I developed the feature incrementally instead of making one final commit.
 
 The implementation was completed in the following stages:
 
+~~~text
         Scaffold
            │
            ▼
@@ -359,30 +375,41 @@ The implementation was completed in the following stages:
            │
            ▼
      Styling / Polish
+~~~
 
 This maintains a meaningful Git history and reflects the incremental development requirement of the assessment.
 
-Result
+## Result
 
 The completed widget provides a complete rescheduling flow for a parent:
 
+~~~text
 View upcoming sessions
-        ↓
+        │
+        ▼
 Choose a session
-        ↓
+        │
+        ▼
 Request reschedule
-        ↓
+        │
+        ▼
 Choose local date/time
-        ↓
+        │
+        ▼
 Choose reason
-        ↓
+        │
+        ▼
 Validate request
-        ↓
+        │
+        ▼
 Convert local time to UTC
-        ↓
+        │
+        ▼
 Process request
-        ↓
+        │
+        ▼
 Show success or error
+~~~
 
 The implementation combines the required UI, validation, timezone handling, lead-time policy, typed function response, and asynchronous state handling into one self-contained feature.
 
