@@ -12,8 +12,6 @@
 GitHub:
 https://github.com/arnika74/
 
----
-
 ## 2. Repository 1 — Energy Research App
 
 **Repository:**
@@ -49,8 +47,6 @@ If I were redesigning the application today, I would make the communication cont
 
 Because the research process is asynchronous and involves multiple processing stages, having clearly defined contracts for each stage would make the system easier to debug and maintain. It would also reduce the possibility of response-format mismatches when changes are made to one part of the pipeline.
 
----
-
 ## 3. Repository 2 — Zerodha Clone
 
 **Repository:**
@@ -79,7 +75,6 @@ If I were rebuilding the project today, I would put more emphasis on creating a 
 As the number of dashboard sections and UI components grows, keeping shared data and UI logic organized becomes increasingly important. I would separate reusable components, API-related logic, and application state more systematically so that adding new features would require less duplication and the project would be easier to maintain.
 
 ---
-
 # Part 2 — Debugging Round
 
 The supplied Cloud Function contained issues related to asynchronous Firestore operations, runtime input validation, and authentication.
@@ -88,11 +83,11 @@ The supplied Cloud Function contained issues related to asynchronous Firestore o
 
 The callable function did not verify whether the caller was authenticated before creating a booking. The function received `context`, but the authentication information was not checked.
 
-### Fix
+### Fix : 
 
 I added a `context.auth` check and return an `unauthenticated` error when there is no authenticated user.
 
-### Production impact
+### Production impact :
 
 Without authentication, an unauthenticated client could invoke the callable function directly and potentially create bookings.
 
@@ -100,11 +95,11 @@ Without authentication, an unauthenticated client could invoke the callable func
 
 The `BookingRequest` interface provides TypeScript compile-time information, but it does not validate data received from a client at runtime.
 
-### Fix
+### Fix :
 
 I added runtime checks to verify that `studentId`, `teacherId`, `slot`, and `subject` are strings and are not empty.
 
-### Production impact
+### Production impact :
 
 Client input should be treated as untrusted. Without runtime validation, malformed data could reach the application logic or database.
 
@@ -112,11 +107,11 @@ Client input should be treated as untrusted. Without runtime validation, malform
 
 The `.get()` operation returns a Promise, but the original code attempted to access `existing.docs` before waiting for the Firestore query to complete.
 
-### Fix
+### Fix :
 
 I made the callable function asynchronous and used `await` when retrieving the Firestore query result.
 
-### Production impact
+### Production impact :
 
 Waiting for the query to complete ensures that the slot availability check uses the actual Firestore result instead of a pending Promise.
 
@@ -124,15 +119,15 @@ Waiting for the query to complete ensures that the slot availability check uses 
 
 The original code called `.add(booking)` without awaiting the database write and immediately returned a successful response.
 
-### Fix
+### Fix :
 
 I used `await` for the Firestore write before returning `{ success: true }`.
 
-### Production impact
+### Production impact :
 
 This ensures the function does not report a successful booking before the database operation has completed.
 
-overall bug summary :-
+## Overall bug summary :-
 
 | Bug                              | Problem                                                                     | Fix                  |
 | -------------------------------- | --------------------------------------------------------------------------- | -------------------- |
