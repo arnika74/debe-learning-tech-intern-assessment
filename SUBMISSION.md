@@ -150,6 +150,7 @@ The request is then passed to a locally mocked `requestReschedule` Cloud Functio
 
 ### The overall flow is:
 
+```text
 Parent views upcoming sessions
             ↓
 Selects a session
@@ -175,13 +176,15 @@ Result shown to parent
 ### Why the Validation Is Important
 The rescheduling feature should not accept every date and time entered by the parent.
 
-- The mock requestReschedule function validates that:
-The new slot is valid.
-The new slot is not in the past.
-The new slot is different from the existing session time.
+The mock requestReschedule function validates that:
+
+- The new slot is valid.
+- The new slot is not in the past.
+- The new slot is different from the existing session time.
 
 It returns the following typed response:
 
+```text
 {
   success: boolean;
   error?: string;
@@ -217,6 +220,7 @@ However, the application should not store timezone-dependent local values as the
 
 Therefore, my implementation follows this flow:
 
+```text
 Parent selects local date/time
             ↓
 Browser timezone is determined
@@ -239,6 +243,7 @@ The session, reschedule request, reason, and response structures are represented
 
 For example:
 
+```text
 types/
 ├── session.ts
 └── reschedule.ts
@@ -270,18 +275,19 @@ After a successful request, the parent receives a clear confirmation that the re
 ### Technical Implementation
 The feature was built using:
 
-Next.js App Router
-React
-TypeScript
-Tailwind CSS
-shadcn/ui
-date-fns
-date-fns-tz
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- date-fns
+- date-fns-tz
 
 The Firebase Cloud Function was mocked locally because the assessment explicitly allows the function to be stubbed locally and does not require a deployed Firebase project.
 
 ### Project Structure
 
+```text
 session-reschedule-widget/
 │
 ├── app/
@@ -309,6 +315,7 @@ session-reschedule-widget/
 I developed the feature incrementally instead of making one final commit.
 The implementation was completed in the following stages:
 
+```text
 Scaffold
    ↓
 UI
