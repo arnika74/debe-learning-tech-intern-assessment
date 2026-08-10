@@ -287,7 +287,7 @@ The Firebase Cloud Function was mocked locally because the assessment explicitly
 
 ### Project Structure
 
-```text
+
 session-reschedule-widget/
 │
 ├── app/
