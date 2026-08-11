@@ -4,6 +4,8 @@ This repository contains my submission for the **Debe Learning Tech Intern Asses
 
 The assessment covers GitHub portfolio projects, debugging, a Next.js build task, and an explain-it-yourself video walkthrough.
 
+Drive Link : https://drive.google.com/drive/folders/1C7KiaOQ4mGqJ7AhXNfi2pQrxjQBEJZAL?usp=sharing
+
 ---
 
 # Repository Structure

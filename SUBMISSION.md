@@ -416,16 +416,9 @@ The implementation combines the required UI, validation, timezone handling, lead
 # Part 4 — Explain-It-Yourself Video
 
 **Video Link:**
-[To be added]
+https://drive.google.com/drive/folders/1C7KiaOQ4mGqJ7AhXNfi2pQrxjQBEJZAL?usp=sharing
 
 **Access:** Anyone with the link
 
 ---
 
-# Final Submission
-
-**Assessment Repository:**
-[To be added]
-
-**Video:**
-[To be added]
